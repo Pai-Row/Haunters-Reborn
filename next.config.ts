@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "a.storyblok.com",
         pathname: "/**",
+        output: "standalone",
       },
     ],
   },
