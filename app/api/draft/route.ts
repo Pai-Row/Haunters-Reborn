@@ -14,11 +14,11 @@ export async function GET(request: NextRequest) {
   const dm = await draftMode();
   dm.enable();
 
-  // Normalize path
+  // normalize path
   let path = slug.trim();
   if (!path || path === "home") path = "/";
   else if (!path.startsWith("/")) path = `/${path}`;
 
-  // Redirect WITHOUT forwarding secret params
-  return NextResponse.redirect(new URL(path, request.url));
+  const base = process.env.PUBLIC_SITE_URL ?? url.origin; // fallback if missing
+  return NextResponse.redirect(new URL(path, base));
 }
