@@ -1,10 +1,13 @@
+import { storyblokEditable } from "@storyblok/react/rsc";
 import Image from "next/image";
 
 export function Hero({ blok }: any) {
   const bg = blok?.image?.filename;
 
   return (
-    <section className="relative overflow-hidden">
+    <section 
+      {...storyblokEditable(blok)}
+      className="relative overflow-hidden">
       {/* Background */}
       {bg && (
         <div className="absolute inset-0">
