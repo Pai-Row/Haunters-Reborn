@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
 
   const secret = searchParams.get("secret");
-  const slug = searchParams.get("slug") || "home";
+  const slugParam = searchParams.get("slug") ?? "";
 
   if (!secret || secret !== process.env.DRAFT_SECRET) {
     return NextResponse.json({ ok: false, message: "Invalid secret" }, { status: 401 });
@@ -14,8 +14,15 @@ export async function GET(request: NextRequest) {
 
   (await draftMode()).enable();
 
-  // Storyblok sends "home" for homepage; your route is "/"
-  const path = slug === "home" ? "/" : `/${slug.replace(/^\/+/, "")}`;
+  // Normalise slug
+  const slug = slugParam.replace(/^\/+/, ""); // remove leading slash
+  const pathname = slug === "" || slug === "home" ? "/" : `/${slug}`;
 
-  redirect(path);
+  // Preserve ONLY Storyblok editor params (drop secret + slug)
+  const forwarded = new URLSearchParams(searchParams);
+  forwarded.delete("secret");
+  forwarded.delete("slug");
+
+  const qs = forwarded.toString();
+  redirect(qs ? `${pathname}?${qs}` : pathname);
 }
