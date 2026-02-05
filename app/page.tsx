@@ -17,5 +17,10 @@ const fetchHomePage = async () => {
 
 export default async function HomePage() {
   const story = await fetchHomePage();
-  return <StoryblokStory story={story} />;
+  return(
+    <StoryblokStory
+      bridgeOptions={{ resolveRelations: "recommended_attractions.attractions" }}
+      story={story} 
+    />
+  ) 
 }
