@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ ok: false, message: "Invalid secret" }, { status: 401 });
   }
 
-  draftMode().enable();
+  (await draftMode()).enable();
 
   // Storyblok sends "home" for homepage; your route is "/"
   const path = slug === "home" ? "/" : `/${slug.replace(/^\/+/, "")}`;
